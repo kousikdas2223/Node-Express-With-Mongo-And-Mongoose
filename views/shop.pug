@@ -1,0 +1,21 @@
+extends layouts/main-layout.pug 
+
+block styles 
+    link(rel="stylesheet" href="/css/product.css")
+block content 
+    main 
+        if prods.length > 0
+            .grid
+                each product in prods 
+                    article.card.product-item 
+                        header.card__header 
+                            h1.product__title #{product.title} 
+                        div.card__image
+                            img(src="https://tse2.mm.bing.net/th?id=OIP.h0qeR3xlqRRTEqIVYId9vgHaFG&pid=Api&P=0&h=220" alt="A Book")
+                        div.card__content 
+                            h2.product__price $19.99
+                            p.product_description A Very Good Book
+                        .card__actions 
+                            button.btn Add to Cart
+        else 
+            h1 No Products
