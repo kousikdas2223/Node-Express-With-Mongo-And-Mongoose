@@ -9,23 +9,28 @@ router.get("/login", authController.getLogin);
 
 router.get("/signup", authController.getSignup);
 
-router.post("/login",
+router.post(
+  "/login",
   check("email")
     .isEmail()
-    .withMessage("Please enter a valid email"),
+    .withMessage("Please enter a valid email")
+    .normalizeEmail(),
   body(
     "password",
     "Password must be more than 8 character in length and alphanumeric"
   )
     .isLength({ min: 8 })
-    .isAlphanumeric(),
-  authController.postLogin);
+    .isAlphanumeric()
+    .trim(),
+  authController.postLogin
+);
 
 router.post(
   "/signup",
   check("email")
     .isEmail()
     .withMessage("Please enter a valid email")
+    .normalizeEmail()
     .custom((value, { req }) => {
       // if(value === 'test@test.com'){
       //     throw new Error('This email address is forbidden');
@@ -44,11 +49,14 @@ router.post(
     "Password must be more than 8 character in length and alphanumeric"
   )
     .isLength({ min: 8 })
-    .isAlphanumeric(),
+    .isAlphanumeric()
+    .trim(),
   //Alternative
   // .isLength({min: 8}).withMessage('Password must be more than 8 character in length')
   // .isAlphanumeric().withMessage('Password must be alphanumeric'),
-  check("confirmPassword").custom((value, { req }) => {
+  check("confirmPassword")
+    .trim()
+    .custom((value, { req }) => {
     if (value !== req.body.password) {
       throw new Error("Passwords have to match");
     }
